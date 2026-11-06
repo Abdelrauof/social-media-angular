@@ -1,0 +1,79 @@
+<div class="mx-auto max-w-2xl py-6 sm:py-8">
+  <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+    <div class="mb-6 flex items-center gap-3">
+      <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#e7f3ff] text-[#1877f2]">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </span>
+      <div>
+        <h1 class="text-xl font-extrabold text-slate-900 sm:text-2xl">Change Password</h1>
+        <p class="text-xs sm:text-sm text-slate-500">Keep your account secure by using a strong password.</p>
+      </div>
+    </div>
+
+    @if (successMessage()) {
+      <div class="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs sm:text-sm font-semibold text-emerald-800 flex items-center gap-2">
+        <svg class="h-4 w-4 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        <span>{{ successMessage() }}</span>
+      </div>
+    }
+
+    @if (errorMessage()) {
+      <div class="mb-5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs sm:text-sm font-semibold text-rose-700">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    <form [formGroup]="passwordForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+          Current Password
+        </label>
+        <input type="password" formControlName="currentPassword" placeholder="Enter current password"
+               class="w-full rounded-xl border bg-slate-50 p-3 text-sm text-slate-800 outline-none transition focus:border-[#00298d] focus:bg-white"
+               [ngClass]="passwordForm.get('currentPassword')?.touched && passwordForm.get('currentPassword')?.invalid ? 'border-rose-300' : 'border-slate-200'" />
+        @if (passwordForm.get('currentPassword')?.touched && passwordForm.get('currentPassword')?.invalid) {
+          <p class="mt-1 text-xs font-semibold text-rose-600">Current password is required</p>
+        }
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+          New Password
+        </label>
+        <input type="password" formControlName="newPassword" placeholder="Enter new password"
+               class="w-full rounded-xl border bg-slate-50 p-3 text-sm text-slate-800 outline-none transition focus:border-[#00298d] focus:bg-white"
+               [ngClass]="passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.invalid ? 'border-rose-300' : 'border-slate-200'" />
+        <p class="mt-1 text-xs text-slate-400">At least 6 characters with mixed letters and numbers.</p>
+        @if (passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.invalid) {
+          <p class="mt-1 text-xs font-semibold text-rose-600">New password must be at least 6 characters</p>
+        }
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+          Confirm New Password
+        </label>
+        <input type="password" formControlName="confirmPassword" placeholder="Re-enter new password"
+               class="w-full rounded-xl border bg-slate-50 p-3 text-sm text-slate-800 outline-none transition focus:border-[#00298d] focus:bg-white"
+               [ngClass]="passwordForm.errors?.['mismatch'] && passwordForm.get('confirmPassword')?.touched ? 'border-rose-300' : 'border-slate-200'" />
+        @if (passwordForm.errors?.['mismatch'] && passwordForm.get('confirmPassword')?.touched) {
+          <p class="mt-1 text-xs font-semibold text-rose-600">Passwords do not match</p>
+        }
+      </div>
+
+      <div class="pt-2">
+        <button type="submit" [disabled]="isSubmitting()"
+                class="w-full sm:w-auto rounded-xl bg-[#00298d] px-6 py-2.5 text-sm font-bold text-white transition hover:bg-[#001f6b] disabled:opacity-50">
+          {{ isSubmitting() ? 'Updating Password...' : 'Update Password' }}
+        </button>
+      </div>
+    </form>
+  </section>
+</div>
+
